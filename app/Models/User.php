@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -44,5 +45,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(transactions::class);
+    }
+
+    public function budgets()
+    {
+        return $this->hasMany(Budgets::class);
+    }
+
+    public function investments()
+    {
+        return $this->hasMany(Investments::class);
+    }
+
+    public function chatMessages()
+    {
+        return $this->hasMany(ChatMessages::class);
     }
 }
