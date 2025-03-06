@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class transactions extends Model
 {
@@ -15,7 +16,8 @@ class transactions extends Model
         'descripcion',
     ];
 
-    public function user() {
+    public function user() : BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }

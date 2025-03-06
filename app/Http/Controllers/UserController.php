@@ -19,7 +19,12 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return response()->json($user);
+        $transaction_total = $user->gastosTotalesPorMes();
+        return response()->json([
+            'transaccion_total' => $transaction_total,
+            'user'=> $user
+        ]
+        );
     }
 
 
@@ -67,4 +72,5 @@ class UserController extends Controller
             'message' => 'Usuario eliminado correctamente.',
         ]);
     }
+
 }

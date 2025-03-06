@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -47,23 +48,34 @@ class User extends Authenticatable
         ];
     }
 
-    public function transactions()
+    public function transactions(): HasMany
     {
         return $this->hasMany(transactions::class);
     }
 
-    public function budgets()
+    public function budgets(): HasMany
     {
         return $this->hasMany(Budgets::class);
     }
 
-    public function investments()
+    public function investments(): HasMany
     {
         return $this->hasMany(Investments::class);
     }
 
-    public function chatMessages()
+    public function chatMessages(): HasMany
     {
         return $this->hasMany(ChatMessages::class);
     }
+
+    public function gastosTotalesPorMes()
+    {
+        return $this->transactions()->selectRaw("substr(fecha, 1, 7) as year_month, 
+                     SUM(CASE WHEN tipo = 'gasto' THEN monto ELSE 0 END) as total_gastos,
+                     SUM(CASE WHEN tipo = 'ingreso' THEN monto ELSE 0 END) as total_ingresos")
+        ->groupBy('year_month')
+        ->orderBy('year_month', 'asc')
+        ->get();
+    }
+    
 }
