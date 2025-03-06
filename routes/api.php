@@ -1,26 +1,27 @@
 <?php
 
-// use App\Http\Controllers\AuthController;
-// use App\Http\Controllers\BudgetsController;
-// use App\Http\Controllers\InvestmentsController;
-// use App\Http\Controllers\TransactionsController;
-// use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BudgetsController;
+use App\Http\Controllers\InvestmentsController;
+use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-// Route::post('/auth/register',[AuthController::class, 'register']);
-// Route::put('/auth/login',[AuthController::class, 'login']);
+
+Route::post('/auth/register',[AuthController::class, 'register']);
+Route::post('/auth/login',[AuthController::class, 'login']);
 
 //
 // TODO: convertir en rutas protegidas
 //
 // Route::middleware('auth:sanctum')->group(function () {
     // Route::get('/users/{id}',[UserController::class, 'getUser']);
-    // Route::put('/users/{id}',[UserController::class, 'setUser']);
+    Route::apiResource('/users', UserController::class);
+    // Route::middleware('auth:sanctum')->group(function () {
+    // });
 
+    Route::apiResource('/transactions', TransactionsController::class);
     // Route::get('/transactions',[TransactionsController::class,'getTransactions']);
     // Route::get('/transactions/{id}',[TransactionsController::class,'getTransaction']);
     // Route::post('/transactions',[TransactionsController::class,'create']);
@@ -28,6 +29,7 @@ Route::get('/', function () {
     // Route::delete('/transactions/{id}',[TransactionsController::class,'remove']);
     // Route::post('/transactions/import',[TransactionsController::class,'import']);
 
+    Route::apiResource('/budgets', BudgetsController::class);
     // Route::get('/budgets',[BudgetsController::class,'getBudgets']);
     // Route::get('/budgets/{id}',[BudgetsController::class,'getBudget']);
     // Route::post('/budgets',[BudgetsController::class,'create']);
