@@ -19,9 +19,11 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        $transaction_total = $user->gastosTotalesPorMes();
+
         return response()->json([
-            'transaccion_total' => $transaction_total,
+            'inversiones' => $user->obtenerInversiones(),
+            'presupuestos' => $user->presupuestoPorCategoria(),
+            'transacciones' => $user->resumenPorMes(),
             'user'=> $user
         ]
         );

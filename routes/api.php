@@ -35,7 +35,8 @@ Route::post('/auth/login',[AuthController::class, 'login']);
     // Route::post('/budgets',[BudgetsController::class,'create']);
     // Route::put('/budgets/{id}',[BudgetsController::class,'setBudget']);
     // Route::delete('/budgets/{id}',[BudgetsController::class,'remove']);
-
+    
+    Route::apiResource('/investments', InvestmentsController::class);
     // Route::get('/investments',[InvestmentsController::class,'getInvestments']);
     // Route::get('/investments/{id}',[InvestmentsController::class,'getInvestment']);
     // Route::post('/investments',[InvestmentsController::class,'create']);

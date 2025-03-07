@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class transactions extends Model
 {
@@ -16,8 +17,12 @@ class transactions extends Model
         'descripcion',
     ];
 
+    
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
     }
+
+
+
 }
