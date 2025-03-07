@@ -11,7 +11,6 @@ class AuthController extends Controller
     public function register(Request $request)
     {
 
-        // el error esta en la validacion
         $validated = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
