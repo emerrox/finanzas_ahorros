@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->date('fecha_nacimiento')->nullable();
-            $table->string('ubicacion')->nullable();
+            $table->date('fecha_nacimiento')->nullable()->default(null);
+            $table->string('ubicacion')->nullable()->default(null);
             $table->enum('perfil_riesgo', ['conservador', 'moderado', 'agresivo'])->default('conservador');
             $table->string('idioma')->default('español');
             $table->enum('moneda', ['euro','dolar','libra'])->default('euro');
