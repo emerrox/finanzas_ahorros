@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AuthController extends Controller
 {
+
+    public function create(): Response
+    {
+        return Inertia::render('Login');
+    }
+
+
     public function register(Request $request)
     {
 
@@ -34,7 +43,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function login(Request $request) 
+    public function store(Request $request): \Illuminate\Http\JsonResponse | \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'email' => 'required|string|email',
@@ -45,15 +54,12 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'Credenciales incorrectas',
+                'message' => 'Las credenciales no coinciden con nuestros registros'
             ], 401);
         }
         
         // $token = $user->createToken($user->email . '-' . now())->plainTextValue;
-        return response()->json([
-            'message' => 'Autenticación correcta',
-            // 'token' => $token,
-        ]);
+        return to_route('dashboard')->with('message', 'Inicio de sesión exitoso');
     }
 
     public function logout(Request $request)
