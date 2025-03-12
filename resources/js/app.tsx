@@ -1,5 +1,5 @@
 import React from 'react';
-import { App, createInertiaApp } from '@inertiajs/inertia-react';
+import { App, createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import Login from './Pages/Login';
