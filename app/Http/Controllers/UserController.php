@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -16,17 +17,20 @@ class UserController extends Controller
     }
 
 
-    public function show($id)
+    public function show(Request $request)
     {
+        $id = $request->user()->id;
         $user = User::findOrFail($id);
 
-        return response()->json([
+        $data = response()->json([
             'inversiones' => $user->obtenerInversiones(),
             'presupuestos' => $user->presupuestoPorCategoria(),
             'transacciones' => $user->resumenPorMes(),
             'user'=> $user
         ]
         );
+
+        return Inertia::render('Dashboard', ['data' => $data]);
     }
 
 
