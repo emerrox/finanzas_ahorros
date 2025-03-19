@@ -10,6 +10,9 @@ Route::get('/login', [AuthController::class, 'create'])->name('login')->middlewa
 Route::post('/logout', [AuthController::class, 'destroy'])->name('logout')->middleware('auth');
 Route::post('/login', [AuthController::class, 'store'])->name('login.store')->middleware('guest');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/', function () {
+    return Inertia::render('Welcome');
+})->name('welcome')->middleware('guest');
 
 Route::middleware('auth')->group(function () {
 
