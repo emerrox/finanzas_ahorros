@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -81,49 +81,51 @@ class User extends Authenticatable
 
     public function resumenPorMes()
     {
+        // Consulta global por mes
         $global = $this->transactions()
             ->selectRaw("
-                fecha,
-                substr(fecha, 1, 7) as year_month, 
+                strftime('%Y-%m', fecha) as year_month,
                 SUM(CASE WHEN tipo = 'gasto' THEN monto ELSE 0 END) as total_gastos,
                 SUM(CASE WHEN tipo = 'ingreso' THEN monto ELSE 0 END) as total_ingresos
             ")
             ->groupBy('year_month')
             ->orderBy('year_month', 'asc')
             ->get();
-
+    
+        // Consulta detallada por categoría
         $desglose = $this->transactions()
             ->selectRaw("
-                fecha, 
+                strftime('%Y-%m', fecha) as year_month,
                 categoria,
                 SUM(CASE WHEN tipo = 'gasto' THEN monto ELSE 0 END) as gastos,
                 SUM(CASE WHEN tipo = 'ingreso' THEN monto ELSE 0 END) as ingresos
             ")
-            ->groupBy('fecha', 'categoria')
-            ->orderBy('fecha', 'asc')
+            ->groupBy(DB::raw("year_month, categoria"))
+            ->orderBy('year_month', 'asc')
             ->orderBy('categoria', 'asc')
             ->get();
-
+    
+        // Estructurar los resultados
         $result = [];
         foreach ($global as $item) {
-            $result[$item->fecha] = [
+            $result[$item->year_month] = [
                 'year_month'      => $item->year_month,
                 'total_gastos'    => $item->total_gastos,
                 'total_ingresos'  => $item->total_ingresos,
                 'desglose'        => []
             ];
         }
-
+    
         foreach ($desglose as $d) {
-            if (isset($result[$d->fecha])) {
-                $result[$d->fecha]['desglose'][] = [
-                    'categoria'=> $d->categoria,
-                    'gastos'   => $d->gastos,
-                    'ingresos' => $d->ingresos,
+            if (isset($result[$d->year_month])) {
+                $result[$d->year_month]['desglose'][] = [
+                    'categoria' => $d->categoria,
+                    'gastos'    => $d->gastos,
+                    'ingresos'  => $d->ingresos,
                 ];
             }
         }
-
+    
         return array_values($result);
     }
 
@@ -132,6 +134,7 @@ class User extends Authenticatable
         $presupuesto = $this->budgets()
             ->select(
                 'categoria',
+                'periodo',
                 'monto_limite'
             )
             ->groupBy('categoria')

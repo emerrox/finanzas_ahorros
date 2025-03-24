@@ -19,17 +19,15 @@ class UserController extends Controller
 
     public function show(Request $request)
     {
-        $id = $request->user()->id;
-        $user = User::findOrFail($id);
-
-        $data = response()->json([
+        $user = $request->user();
+        
+        $data = [
             'inversiones' => $user->obtenerInversiones(),
             'presupuestos' => $user->presupuestoPorCategoria(),
             'transacciones' => $user->resumenPorMes(),
-            'user'=> $user
-        ]
-        );
-
+            'user' => $user
+        ];
+    
         return Inertia::render('Dashboard', ['data' => $data]);
     }
 

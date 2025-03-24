@@ -16,6 +16,7 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+
 :root {
     --radius: 0.625rem;
     --background: oklch(1 0 0);
@@ -49,6 +50,44 @@
     --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
     --sidebar-border: oklch(0.929 0.013 255.508);
     --sidebar-ring: oklch(0.704 0.04 256.788);
+
+    --color-investments-50: #f1fcf5;
+    --color-investments-100: #defaea;
+    --color-investments-200: #bef4d4;
+    --color-investments-300: #8beab3;
+    --color-investments-400: #52d689;
+    --color-investments-500: #2ecc71;
+    --color-investments-600: #1d9c53;
+    --color-investments-700: #1b7a43;
+    --color-investments-800: #1a6139;
+    --color-investments-900: #175031;
+    --color-investments-950: #072c18;
+
+    --color-transactions-50: #f2f8fd;
+    --color-transactions-100: #e3effb;
+    --color-transactions-200: #c1dff6;
+    --color-transactions-300: #8ac5ef;
+    --color-transactions-400: #4ca7e4;
+    --color-transactions-500: #3498db;
+    --color-transactions-600: #176fb2;
+    --color-transactions-700: #145990;
+    --color-transactions-800: #144c78;
+    --color-transactions-900: #164064;
+    --color-transactions-950: #0f2942;
+
+    --color-budgets-50: #fffbeb;
+    --color-budgets-100: #fdf2c8;
+    --color-budgets-200: #fce38b;
+    --color-budgets-300: #facf4f;
+    --color-budgets-400: #f9bb26;
+    --color-budgets-500: #f39c12;
+    --color-budgets-600: #d77408;
+    --color-budgets-700: #b2510b;
+    --color-budgets-800: #913e0f;
+    --color-budgets-900: #773310;
+    --color-budgets-950: #441904;
+
+
 }
 
 .dark {
