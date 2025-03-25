@@ -129,19 +129,56 @@ class User extends Authenticatable
         return array_values($result);
     }
 
-    public function presupuestoPorCategoria()
-    {
-        $presupuesto = $this->budgets()
-            ->select(
-                'categoria',
-                'periodo',
-                'monto_limite'
-            )
-            ->groupBy('categoria')
-            ->get();
+    public function ultimasTransacciones()
+{
+    return $this->transactions()
+        ->orderByDesc('fecha')  // Ordenar por fecha descendente
+        ->limit(6)             // Limitar a 7 registros
+        ->get();
+}
 
-        return $presupuesto;
-    }
+public function presupuestoPorCategoria()
+{
+    // Primero obtenemos los presupuestos agrupados por categoría.
+    $budgets = $this->budgets()
+        ->select('categoria', 'periodo', 'monto_limite')
+        ->groupBy('categoria')
+        ->get();
+
+    // Para cada presupuesto, calculamos lo gastado y lo recibido en el periodo indicado.
+    $result = $budgets->map(function($budget) {
+        // Determinar el rango de fechas según el período.
+        if ($budget->periodo === 'mensual') {
+            $start = now()->startOfMonth()->toDateString();
+            $end = now()->endOfMonth()->toDateString();
+        } elseif ($budget->periodo === 'anual') {
+            $start = now()->startOfYear()->toDateString();
+            $end = now()->endOfYear()->toDateString();
+        } else {
+            // Por defecto, usamos el mes actual.
+            $start = now()->startOfMonth()->toDateString();
+            $end = now()->endOfMonth()->toDateString();
+        }
+
+        // Consultar las transacciones del usuario para la categoría y dentro del rango de fechas.
+        $sums = $this->transactions()
+            ->where('categoria', $budget->categoria)
+            ->whereBetween('fecha', [$start, $end])
+            ->selectRaw("
+                SUM(CASE WHEN tipo = 'gasto' THEN monto ELSE 0 END) as gastos,
+                SUM(CASE WHEN tipo = 'ingreso' THEN monto ELSE 0 END) as ingresos
+            ")
+            ->first();
+
+        // Asignar los resultados al presupuesto.
+        $budget->gastos = $sums->gastos ?? 0;
+        $budget->ingresos = $sums->ingresos ?? 0;
+        return $budget;
+    });
+
+    return $result;
+}
+
 
 
     

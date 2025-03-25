@@ -7,6 +7,7 @@ import { AuroraText } from '@/components/ui/aurora-text';
 import { BentoCard, BentoGrid } from '@/components/ui/bento-grid';
 import { Bot, ChartLine, Euro,PiggyBank, TrendingUp } from 'lucide-react';
 import CurrentMonthTransactions from '@/components/CurrentMonthTransactions';
+import BudgetsDashboard from '@/components/BudgetsDashboard';
 
 interface Presupuesto {
   categoria: string;
@@ -56,13 +57,12 @@ const Dashboard = () => {
         inversiones: any,
         presupuestos:any,
         transacciones: {        
-            year_month: string;
-            total_gastos: number;
-            total_ingresos: number;
-            desglose: {
-            categoria: string;
-            gastos: number;
-            }[];}[],
+          fecha: string;
+          descripcion: string;
+          monto: number;
+          tipo: 'gasto' | 'ingreso';
+          categoria: string;
+        }[],
         user:any
      } }>().props.data;
     console.log(data);
@@ -76,7 +76,7 @@ const Dashboard = () => {
           description:"",
           href: "/transactions",
           cta: "Ir a transacciones",
-          background: <CurrentMonthTransactions total_ingresos={data.transacciones[0].total_ingresos} year_month={data.transacciones[0].year_month} total_gastos={data.transacciones[0].total_gastos} desglose={data.transacciones[0].desglose} />,
+          background: <CurrentMonthTransactions transactions={data.transacciones} />,
           className: "lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-3",
         },
         {
@@ -112,7 +112,7 @@ const Dashboard = () => {
             description: "",
             href: "/budgets",
             cta: "Ir a presupuestos",
-          background:<img className="absolute -right-20 -top-20 opacity-60" /> ,
+          background:<BudgetsDashboard expenseData={data.presupuestos} /> ,
           className: "lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-4",
         },
       ];

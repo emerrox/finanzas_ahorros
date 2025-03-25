@@ -24,7 +24,7 @@ class UserController extends Controller
         $data = [
             'inversiones' => $user->obtenerInversiones(),
             'presupuestos' => $user->presupuestoPorCategoria(),
-            'transacciones' => $user->resumenPorMes(),
+            'transacciones' => $user->ultimasTransacciones(),
             'user' => $user
         ];
     
