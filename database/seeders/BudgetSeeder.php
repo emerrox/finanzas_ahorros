@@ -13,23 +13,10 @@ class BudgetSeeder extends Seeder
         // Puedes crear múltiples budgets de prueba
         Budgets::create([
             'user_id' => 1, // Ajusta el ID según tus usuarios de prueba
-            'categoria' => 'Vivienda',
-            'monto_limite' => 800.00,
+            'categoria' => 'Ocio',
+            'monto_limite' => 1500.00,
             'periodo' => 'mensual',
         ]);
 
-        Budgets::create([
-            'user_id' => 1,
-            'categoria' => 'Alimentación',
-            'monto_limite' => 400.00,
-            'periodo' => 'mensual',
-        ]);
-
-        Budgets::create([
-            'user_id' => 1,
-            'categoria' => 'Transporte',
-            'monto_limite' => 200.00,
-            'periodo' => 'mensual',
-        ]);
     }
 }

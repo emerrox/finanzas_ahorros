@@ -35,7 +35,7 @@ const RecentTransactions: React.FC<Props> = ({ transactions = [] }) => {
   }
 
   return (
-    <div className="w-full h-full rounded-lg  overflow-hidden ">
+    <div className="w-full h-full rounded-lg  overflow-hidden mt-6">
 
 
       <div className="p-4">
@@ -43,7 +43,7 @@ const RecentTransactions: React.FC<Props> = ({ transactions = [] }) => {
             <ul className="space-y-4" aria-label="Lista de transacciones recientes">
               {transactions.map((transaction, index) => (
                 <li key={`${transaction.fecha}-${index}`} className="group">
-                  <div className="flex items-center gap-3 p-3 rounded-lg transition-all bg-white dark:bg-transactions-900/50 border border-transactions-100 dark:border-transactions-800 hover:border-transactions-300 dark:hover:border-transactions-700 shadow-sm">
+                  <div className="flex items-center gap-3 p-3 rounded-lg transition-all bg-white dark:bg-transactions-900/50 hover:bg-transactions-100 dark:border-transactions-800 hover:border-transactions-300 dark:hover:border-transactions-700">
                     <div
                       className={`flex items-center justify-center w-10 h-10 rounded-full ${
                         transaction.tipo === "ingreso"
@@ -67,7 +67,6 @@ const RecentTransactions: React.FC<Props> = ({ transactions = [] }) => {
                           variant="outline"
                           className="flex items-center gap-1 h-5 px-2 text-xs border-transactions-200 dark:border-transactions-700 bg-transactions-50 dark:bg-transactions-900 text-transactions-700 dark:text-transactions-300"
                         >
-                          {getCategoryIcon(transaction.categoria)}
                           <span>{transaction.categoria}</span>
                         </Badge>
                         <div className="flex items-center gap-1">

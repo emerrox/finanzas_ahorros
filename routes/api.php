@@ -17,6 +17,6 @@ use Illuminate\Support\Facades\Route;
 // Route::apiResource('/transactions', TransactionsController::class);
 // // Route::post('/transactions/import',[TransactionsController::class,'import']);
 
-// Route::apiResource('/budgets', BudgetsController::class);
+Route::apiResource('/budgets', BudgetsController::class);
 
 // Route::apiResource('/investments', InvestmentsController::class);

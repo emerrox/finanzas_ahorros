@@ -77,7 +77,7 @@ const Dashboard = () => {
           href: "/transactions",
           cta: "Ir a transacciones",
           background: <CurrentMonthTransactions transactions={data.transacciones} />,
-          className: "lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-3",
+          className: "lg:row-start-1 lg:row-end-5 lg:col-start-2 lg:col-end-3 border-[#4ca7e4] border-1",
         },
         {
           Icon: TrendingUp,
@@ -86,7 +86,7 @@ const Dashboard = () => {
           href: "/investments",
           cta: "Ir a inversiones",
           background: <img className="absolute -right-20 -top-20 opacity-60" />,
-          className: "lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-3",
+          className: "lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-4",
         },
         {
           Icon: Bot,
@@ -95,7 +95,7 @@ const Dashboard = () => {
           href: "/",
           cta: "Empezar",
           background: <img className="absolute -right-20 -top-20 opacity-60" />,
-          className: "lg:col-start-1 lg:col-end-2 lg:row-start-3 lg:row-end-4",
+          className: "lg:col-start-1 lg:col-end-2 lg:row-start-4 lg:row-end-5",
         },
         {
           Icon: ChartLine,
@@ -113,7 +113,7 @@ const Dashboard = () => {
             href: "/budgets",
             cta: "Ir a presupuestos",
           background:<BudgetsDashboard expenseData={data.presupuestos} /> ,
-          className: "lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-4",
+          className: "lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-5 border-[#f39c12] border-1",
         },
       ];
 
@@ -129,7 +129,7 @@ const Dashboard = () => {
             <ProtectedLayout>
                 <h1 className='text-4xl font-bold tracking-tighter md:text-5xl lg:text-7xl' >Titulo <AuroraText colors={["#005A9B", "#4B0082", "#006400", "#8B0000", "#68217A", "#007ACC"]}>Nombre</AuroraText> </h1>
 
-                <BentoGrid className="lg:grid-rows-3 grid-cols-3 gap-4 w-3/5 mx-auto">
+                <BentoGrid className="lg:grid-rows-4 grid-cols-3 max-h-[750px] gap-6 w-3/5 mx-auto">
                     {features.map((feature) => (
                         <BentoCard key={feature.name} {...feature} />
                     ))}
