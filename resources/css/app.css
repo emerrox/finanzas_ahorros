@@ -14,7 +14,22 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
-        --color-transactions-50: #f2f8fd;
+    
+    /* Pickled Bluewood Color Palette */
+    --color-pickled-bluewood-50: #f5f7fa;
+    --color-pickled-bluewood-100: #eaeff4;
+    --color-pickled-bluewood-200: #cfdce8;
+    --color-pickled-bluewood-300: #a6bfd3;
+    --color-pickled-bluewood-400: #759cbb;
+    --color-pickled-bluewood-500: #5480a3;
+    --color-pickled-bluewood-600: #416788;
+    --color-pickled-bluewood-700: #35526f;
+    --color-pickled-bluewood-800: #2f475d;
+    --color-pickled-bluewood-900: #2c3e50;
+    --color-pickled-bluewood-950: #1d2834;
+    
+    /* Transactions Color Palette */
+    --color-transactions-50: #f2f8fd;
     --color-transactions-100: #e3effb;
     --color-transactions-200: #c1dff6;
     --color-transactions-300: #8ac5ef;
@@ -25,8 +40,55 @@
     --color-transactions-800: #144c78;
     --color-transactions-900: #164064;
     --color-transactions-950: #0f2942;
-}
 
+    /* Budgets Color Palette */
+    --color-budgets-50: #fffbeb;
+    --color-budgets-100: #fdf2c8;
+    --color-budgets-200: #fce38b;
+    --color-budgets-300: #facf4f;
+    --color-budgets-400: #f9bb26;
+    --color-budgets-500: #f39c12;
+    --color-budgets-600: #d77408;
+    --color-budgets-700: #b2510b;
+    --color-budgets-800: #913e0f;
+    --color-budgets-900: #773310;
+    --color-budgets-950: #441904;
+
+    /* Semantic Colors */
+    --color-primary: #2c3e50;
+    --color-secondary: #3498db;
+    --color-success: #2ecc71;
+    --color-background: #ecf0f1;
+    
+    /* Base Theme Variables */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 210 29% 24%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 204 70% 53%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+
+    /* Chart colors */
+    --chart-1: 204 70% 53%;
+    --chart-2: 145 63% 49%;
+    --chart-3: 42 87% 67%;
+    --chart-4: 6 78% 57%;
+    --chart-5: 329 86% 70%;
+}
 
 :root {
     --radius: 0.625rem;
@@ -62,6 +124,7 @@
     --sidebar-border: oklch(0.929 0.013 255.508);
     --sidebar-ring: oklch(0.704 0.04 256.788);
 
+    /* Investments Color Palette */
     --color-investments-50: #f1fcf5;
     --color-investments-100: #defaea;
     --color-investments-200: #bef4d4;
@@ -74,6 +137,7 @@
     --color-investments-900: #175031;
     --color-investments-950: #072c18;
 
+    /* Transactions Color Palette */
     --color-transactions-50: #f2f8fd;
     --color-transactions-100: #e3effb;
     --color-transactions-200: #c1dff6;
@@ -86,6 +150,7 @@
     --color-transactions-900: #164064;
     --color-transactions-950: #0f2942;
 
+    /* Budgets Color Palette */
     --color-budgets-50: #fffbeb;
     --color-budgets-100: #fdf2c8;
     --color-budgets-200: #fce38b;
@@ -98,7 +163,24 @@
     --color-budgets-900: #773310;
     --color-budgets-950: #441904;
 
+    /* Pickled Bluewood Color Palette */
+    --color-pickled-bluewood-50: #f5f7fa;
+    --color-pickled-bluewood-100: #eaeff4;
+    --color-pickled-bluewood-200: #cfdce8;
+    --color-pickled-bluewood-300: #a6bfd3;
+    --color-pickled-bluewood-400: #759cbb;
+    --color-pickled-bluewood-500: #5480a3;
+    --color-pickled-bluewood-600: #416788;
+    --color-pickled-bluewood-700: #35526f;
+    --color-pickled-bluewood-800: #2f475d;
+    --color-pickled-bluewood-900: #2c3e50;
+    --color-pickled-bluewood-950: #1d2834;
 
+    /* Semantic Colors */
+    --color-primary: #2c3e50;
+    --color-secondary: #3498db;
+    --color-success: #2ecc71;
+    --color-background: #ecf0f1;
 }
 
 .dark {
@@ -176,8 +258,8 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
+  }
   body {
     @apply bg-background text-foreground;
-    }
+  }
 }

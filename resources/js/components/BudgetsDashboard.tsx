@@ -1,5 +1,6 @@
 import React from "react"
 import { Progress } from "./ui/progress"
+import { Badge } from "@/components/ui/badge"
 
 type ExpenseCategory = {
   categoria: string
@@ -10,92 +11,46 @@ type ExpenseCategory = {
 }
 
 export default function BudgetsDashboard({ expenseData }: { expenseData: ExpenseCategory[] }) {
-  // Custom color palette for text and subtle elements using the new palette
-  const colors = {
-    background: "#fffbeb",
-    text: "#773310",
-    muted: "#913e0f",
-    shadow: "rgba(215, 116, 8, 0.1)",
-    limit: "#b2510b",
-  }
-
-  const categoryColor = "#f39c12" // orange
-
-  // Function to format period text
-  const formatPeriod = (period: string) => {
-    switch (period.toLowerCase()) {
-      case "mensual":
-        return "Mensual"
-      case "diario":
-        return "Diario"
-      case "anual":
-        return "Anual"
-      default:
-        return period
-    }
-  }
-
   return (
-    <div className="w-[90%] m-auto mt-2.5 h-full flex flex-col gap-4 p-3 rounded-lg">
+    <div className="w-[90%] m-auto mt-2.5 h-full flex flex-col gap-7 p-3 rounded-lg ">
+      <h2 className="text-lg font-semibold text-[var(--color-pickled-bluewood-900)]">Limites y presupuestos</h2>
       {expenseData.map((category, index) => {
         const percentSpent = (category.gastos / category.monto_limite) * 100
         const isOverLimit = category.gastos > category.monto_limite
 
         return (
           <div key={index} className="space-y-1.5">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-end">
               <div className="flex flex-col">
-                <div
-                  className="px-3 py-1 rounded-full inline-block"
-                  style={{
-                    backgroundColor: `${categoryColor}20`,
-                  }}
+                <Badge
+                  variant="outline"
+                  className="h-6 px-3 py-1 text-sm font-medium  bg-pickled-bluewood-100  text-[var(--color-pickled-bluewood-900)]"
                 >
-                  <h3 className="text-sm font-medium" style={{ color: categoryColor }}>
-                    {category.categoria}
-                  </h3>
-                </div>
-                <span className="text-xs mt-1 ml-1" style={{ color: colors.muted }}>
-                  {formatPeriod(category.periodo)}
-                </span>
+                  {category.categoria}
+                </Badge>
+                <span className="text-xs mt-1 ml-1 text-[var(--color-pickled-bluewood-400)]">{category.periodo}</span>
               </div>
+
               <div className="text-xs">
-                <span className="font-semibold" style={{ color: isOverLimit ? "#ef4444" : colors.text }}>
+                <span className="font-semibold" style={{ color: isOverLimit ? "#E74C3C" : "#2ECC71" }}>
                   {category.gastos.toLocaleString("es-ES")} €
                 </span>
-                <span style={{ color: colors.muted }}>{" / "}</span>
-                <span style={{ color: colors.muted }}>{category.monto_limite.toLocaleString("es-ES")} €</span>
+                <span className="text-[var(--color-pickled-bluewood-400)]">{" / "}</span>
+                <span className="text-[var(--color-pickled-bluewood-400)]">
+                  {category.monto_limite.toLocaleString("es-ES")} €
+                </span>
               </div>
             </div>
 
             <div className="relative">
               <Progress
                 value={Math.min(percentSpent, 100)}
-                className="h-2"
-                style={{ backgroundColor: "#fdf2c8" }}
-                indicatorClassName=""
+                className="h-2 bg-[var(--color-pickled-bluewood-50)]"
                 indicatorStyle={{
-                  backgroundColor: categoryColor,
+                  backgroundColor: isOverLimit ? "#E74C3C" : "#2ECC71",
                 }}
               />
-
-              {isOverLimit && (
-                <div className="absolute top-0 left-0 w-full flex items-center h-2">
-                  <div className="h-full border-white w-full" />
-                </div>
-              )}
             </div>
-
-            {isOverLimit ? (
-              <p className="text-xs" style={{ color: "#ef4444" }}>
-                +{(category.gastos - category.monto_limite).toLocaleString("es-ES")} € ({Math.round(percentSpent - 100)}
-                %)
-              </p>
-            ) : (
-              <p className="text-xs" style={{ color: categoryColor }}>
-                {Math.round(percentSpent)}%
-              </p>
-            )}
           </div>
         )
       })}
