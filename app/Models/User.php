@@ -76,7 +76,11 @@ class User extends Authenticatable
 
     public function obtenerInversiones()
     {
-        return $this->investments()->get();
+        return $this->investments()
+            ->orderByDesc('fecha_adquisicion')
+            ->orderByDesc('created_at') 
+            ->limit(3)
+            ->get();
     }
 
     public function resumenPorMes()
@@ -132,22 +136,19 @@ class User extends Authenticatable
     public function ultimasTransacciones()
 {
     return $this->transactions()
-        ->orderByDesc('fecha')  // Ordenar por fecha descendente
-        ->limit(6)             // Limitar a 7 registros
+        ->orderByDesc('fecha')  
+        ->limit(6)             
         ->get();
 }
 
 public function presupuestoPorCategoria()
 {
-    // Primero obtenemos los presupuestos agrupados por categoría.
     $budgets = $this->budgets()
         ->select('categoria', 'periodo', 'monto_limite')
         ->groupBy('categoria')
         ->get();
 
-    // Para cada presupuesto, calculamos lo gastado y lo recibido en el periodo indicado.
     $result = $budgets->map(function($budget) {
-        // Determinar el rango de fechas según el período.
         if ($budget->periodo === 'mensual') {
             $start = now()->startOfMonth()->toDateString();
             $end = now()->endOfMonth()->toDateString();
@@ -155,12 +156,10 @@ public function presupuestoPorCategoria()
             $start = now()->startOfYear()->toDateString();
             $end = now()->endOfYear()->toDateString();
         } else {
-            // Por defecto, usamos el mes actual.
             $start = now()->startOfMonth()->toDateString();
             $end = now()->endOfMonth()->toDateString();
         }
 
-        // Consultar las transacciones del usuario para la categoría y dentro del rango de fechas.
         $sums = $this->transactions()
             ->where('categoria', $budget->categoria)
             ->whereBetween('fecha', [$start, $end])
@@ -170,7 +169,6 @@ public function presupuestoPorCategoria()
             ")
             ->first();
 
-        // Asignar los resultados al presupuesto.
         $budget->gastos = $sums->gastos ?? 0;
         $budget->ingresos = $sums->ingresos ?? 0;
         return $budget;

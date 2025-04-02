@@ -29,7 +29,7 @@ export default function InvestmentAssets({ assets }: { assets: InvestmentAsset[]
     <div className="w-[90%] m-auto mt-2.5 h-full flex flex-col gap-4 p-3 rounded-lg">
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-lg font-semibold text-[var(--color-pickled-bluewood-900)]">Cartera de Inversiones</h2>
-        <span className="text-sm text-[var(--color-pickled-bluewood-400)]">{assets.length} activos</span>
+        
       </div>
 
       <div className="space-y-4">
