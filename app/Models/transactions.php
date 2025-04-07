@@ -16,7 +16,9 @@ class transactions extends Model
         'categoria',
         'descripcion',
     ];
-
+    protected $casts = [
+        'fecha' => 'date',
+    ];
     
     public function user() : BelongsTo
     {

@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Budgets');
     })->name('budgets');
 
-    // Route::get('transactions', [transactionsController::class, 'index'])->name('transactions.index');
+    Route::get('transactions', [transactionsController::class, 'index'])->name('transactions.index');
 });
 
 // Route::get('/dashboard', function () {

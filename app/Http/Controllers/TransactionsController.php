@@ -5,13 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\transactions;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class transactionsController extends Controller
 {
     public function index()
     {
-        $transactions = transactions::all();
-        return response()->json($transactions);
+        return Inertia::render('Transactions', [
+            'transactions' => transactions::with('user')->latest()->get()->map(function ($transaction) {
+                return [
+                    'id' => $transaction->id,
+                    'user_id' => $transaction->user_id,
+                    'tipo' => $transaction->tipo,
+                    'monto' => $transaction->monto,
+                    'fecha' => $transaction->fecha->toDateString(),
+                    'categoria' => $transaction->categoria,
+                    'descripcion' => $transaction->descripcion,
+                    'user' => $transaction->user ? [
+                        'name' => $transaction->user->name,
+                        'email' => $transaction->user->email
+                    ] : null
+                ];
+            })
+        ]);
     }
 
     public function show($id)
