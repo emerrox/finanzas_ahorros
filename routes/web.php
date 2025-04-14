@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\transactionsController;
 use App\Http\Controllers\UserController;
 
@@ -18,13 +19,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [UserController::class, 'show'])->name('dashboard');
 
-    Route::get('/transactions', function(){
-        return Inertia::render('Transactions');
-    })->name('transactions');
+    Route::get('/transactions', [transactionsController::class, 'index'])->name('transactions.index');
+    
+    Route::post('/transactions', [transactionsController::class, 'store'])
+    ->name('transactions.store')
+    ->defaults('inertia', true);
 
-    Route::get('/budgets', function (){
-        return Inertia::render('Budgets');
-    })->name('budgets');
+    Route::get('/budgets', [BudgetsController::class, 'index'])->name('budgets.index');
 
     Route::get('transactions', [transactionsController::class, 'index'])->name('transactions.index');
 });

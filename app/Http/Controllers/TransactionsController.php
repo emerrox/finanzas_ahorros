@@ -64,29 +64,22 @@ class transactionsController extends Controller
         ]);
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'user_id'=> 'required|exists:users,id',
-            'tipo'=> 'required|string|max:255|in:ingreso,gasto',
-            'monto'=> 'required|numeric|gt:0',
-            'fecha'=> 'sometimes|date',
-            'categoria'=> 'required|string|max:255',
-            'descripcion'=> 'sometimes|string|max:255',
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'tipo' => 'required|string|in:ingreso,gasto',
+            'monto' => 'required|numeric|min:0.01',
+            'fecha' => 'required|date',
+            'categoria' => 'required|string|max:255',
+            'descripcion' => 'nullable|string|max:500',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Error de validación.',
-                'errors'  => $validator->errors(),
-            ], 400);
-        }
-
-        $transactions = Transactions::create($request->all());
-
-        return response()->json([
-            'message' => 'Transaccion creada correctamente.',
-            'Transactions' => $transactions,
+    
+        $transaction = $request->user()->transactions()->create($validated);
+    
+        return redirect()->back()->with([
+            'success' => 'Transacción creada exitosamente',
+            'transaction' => $transaction
         ]);
     }
 

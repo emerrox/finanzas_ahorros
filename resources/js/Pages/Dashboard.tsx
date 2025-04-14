@@ -9,18 +9,8 @@ import { Bot, LineChartIcon as ChartLine, Euro, PiggyBank, TrendingUp, User, Set
 import CurrentMonthTransactions from "@/components/CurrentMonthTransactions"
 import BudgetsDashboard from "@/components/BudgetsDashboard"
 import InvestmentAssets from "@/components/InvestmentAssets"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import React from "react"
+import React, { useEffect } from "react"
 import UserMenu from "@/components/UserMenu"
-
-
 
 const Dashboard = () => {
   const data = usePage<{
@@ -98,6 +88,7 @@ const Dashboard = () => {
       },
     )
   }
+
 
   return (
     <AppLayout>

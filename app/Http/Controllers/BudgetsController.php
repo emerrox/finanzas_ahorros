@@ -5,13 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Budgets;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BudgetsController extends Controller
 {
     public function index()
     {
-        $budgets = Budgets::all();
-        return response()->json($budgets);
+        return Inertia::render('Budgets', [
+            'budgets' => Budgets::with('user')->latest()->get()->map(function ($budget) {
+                return [
+                    'id' => $budget->id,
+                    'user_id' => $budget->user_id,
+                    'categoria' => $budget->categoria,
+                    'monto_limite' => $budget->monto_limite,
+                    'periodo' => $budget->periodo,
+                    'user' => $budget->user ? [
+                        'name' => $budget->user->name,
+                        'email' => $budget->user->email
+                    ] : null
+                ];
+            })
+        ]);
     }
 
     public function show($id)
