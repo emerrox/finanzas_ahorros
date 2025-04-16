@@ -88,7 +88,7 @@ class transactionsController extends Controller
         $transactions = Transactions::findOrFail($id);
         $transactions->delete();
 
-        return Inertia::swap('Transactions', [
+        Inertia::render('Transactions', [
             'transactions' => Transactions::with('user')->latest()->get()->map(function ($transaction) {
                 return [
                     'id' => $transaction->id,
