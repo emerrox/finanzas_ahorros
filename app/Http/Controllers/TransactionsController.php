@@ -88,8 +88,22 @@ class transactionsController extends Controller
         $transactions = Transactions::findOrFail($id);
         $transactions->delete();
 
-        return response()->json([
-            'message' => 'Transaccion eliminada correctamente.',
+        return Inertia::swap('Transactions', [
+            'transactions' => Transactions::with('user')->latest()->get()->map(function ($transaction) {
+                return [
+                    'id' => $transaction->id,
+                    'user_id' => $transaction->user_id,
+                    'tipo' => $transaction->tipo,
+                    'monto' => $transaction->monto,
+                    'fecha' => $transaction->fecha->toDateString(),
+                    'categoria' => $transaction->categoria,
+                    'descripcion' => $transaction->descripcion,
+                    'user' => $transaction->user ? [
+                        'name' => $transaction->user->name,
+                        'email' => $transaction->user->email
+                    ] : null
+                ];
+            })
         ]);
     }
 }

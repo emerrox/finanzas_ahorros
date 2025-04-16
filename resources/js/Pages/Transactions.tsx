@@ -14,16 +14,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { ArrowUpDown, ChevronDown, Search, ChevronLeft } from "lucide-react"
+import { ArrowUpDown, ChevronDown, Search, ChevronLeft, Trash2 } from "lucide-react"
 import AppLayout from "@/Layouts/AppLayout"
 import ProtectedLayout from "@/Layouts/ProtectedLayout"
-import { Link, router, usePage } from "@inertiajs/react"
+import { Link, usePage } from "@inertiajs/react"
 import { motion, AnimatePresence } from "framer-motion"
-import React from "react"
 import { AuroraText } from "@/components/ui/aurora-text"
 import TransactionForm from "../components/TransactionForm"
 import { Alert } from "@/components/ui/alert"
-import { data } from "react-router-dom"
+import EditTransactionForm from "../components/edit-transaction-form"
+import DeleteConfirmationModal from "../components/delete-confirmation-modal"
+import React from "react"
 
 interface Transaction {
   id: number
@@ -49,9 +50,9 @@ interface TransactionsPageProps {
 
 interface PageProps {
   user: {
-    id: number;
-  };
-  [key: string]: any;
+    id: number
+  }
+  [key: string]: any
 }
 
 type SortDirection = "asc" | "desc"
@@ -66,13 +67,21 @@ function TransactionsPage({ transactions, flash }: TransactionsPageProps): JSX.E
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [transactionToDelete, setTransactionToDelete] = useState<number | null>(null)
+
   useEffect(() => {
     setLocalTransactions(transactions)
   }, [transactions])
-  
-  const pageProps = usePage<PageProps>().props;
-  const userIdFromPage = pageProps.user.id;
-  
+
+  const pageProps = usePage<PageProps>().props
+  const userIdFromPage = pageProps.user.id
+
+  const handleDeleteTransaction = (deletedId: number) => {
+    setLocalTransactions(prev => prev.filter(t => t.id !== deletedId))
+  }
 
   const handleSort = (column: SortColumn) => {
     if (sortColumn === column) {
@@ -84,66 +93,60 @@ function TransactionsPage({ transactions, flash }: TransactionsPageProps): JSX.E
   }
 
   const filteredAndSortedTransactions = useMemo(() => {
-    // Iniciamos "filtered" con todas las transacciones
-    let filtered = localTransactions;
-  
-    // Filtrar si hay consulta de búsqueda
+    let filtered = localTransactions
+
     if (searchQuery.trim() !== "") {
-      const query = searchQuery.toLowerCase();
+      const query = searchQuery.toLowerCase()
       filtered = filtered.filter((transaction) => {
-        const date = new Date(transaction.fecha)
-          .toLocaleDateString()
-          .toLowerCase();
-        const type = transaction.tipo.toLowerCase();
-        const category = transaction.categoria.toLowerCase();
-        const description = transaction.descripcion.toLowerCase();
-        const amount = transaction.monto.toString().toLowerCase();
-  
+        const date = new Date(transaction.fecha).toLocaleDateString().toLowerCase()
+        const type = transaction.tipo.toLowerCase()
+        const category = transaction.categoria.toLowerCase()
+        const description = transaction.descripcion.toLowerCase()
+        const amount = transaction.monto.toString().toLowerCase()
+
         return (
           date.includes(query) ||
           type.includes(query) ||
           category.includes(query) ||
           description.includes(query) ||
           amount.includes(query)
-        );
-      });
+        )
+      })
     }
-  
-    // Aplicar ordenamiento si se definió una columna para ordenar
+
     if (sortColumn) {
       filtered.sort((a, b) => {
-        let valueA: any;
-        let valueB: any;
-  
+        let valueA: any
+        let valueB: any
+
         if (sortColumn === "fecha") {
-          valueA = new Date(a.fecha).getTime();
-          valueB = new Date(b.fecha).getTime();
+          valueA = new Date(a.fecha).getTime()
+          valueB = new Date(b.fecha).getTime()
         } else {
-          valueA = a[sortColumn];
-          valueB = b[sortColumn];
+          valueA = a[sortColumn]
+          valueB = b[sortColumn]
         }
-  
-        // Convertir a minúsculas si es string para comparación consistente
+
         if (typeof valueA === "string") {
-          valueA = valueA.toLowerCase();
-          valueB = valueB.toLowerCase();
+          valueA = valueA.toLowerCase()
+          valueB = valueB.toLowerCase()
         }
-  
-        if (valueA < valueB) return sortDirection === "asc" ? -1 : 1;
-        if (valueA > valueB) return sortDirection === "asc" ? 1 : -1;
-        return 0;
-      });
+
+        if (valueA < valueB) return sortDirection === "asc" ? -1 : 1
+        if (valueA > valueB) return sortDirection === "asc" ? 1 : -1
+        return 0
+      })
     }
-  
-    return filtered;
-  }, [localTransactions, searchQuery, sortColumn, sortDirection]);
-  
-  const totalPages = Math.ceil(filteredAndSortedTransactions.length / itemsPerPage);
-  
+
+    return filtered
+  }, [localTransactions, searchQuery, sortColumn, sortDirection])
+
+  const totalPages = Math.ceil(filteredAndSortedTransactions.length / itemsPerPage)
+
   const paginatedTransactions = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredAndSortedTransactions.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredAndSortedTransactions, currentPage, itemsPerPage]);
+    const startIndex = (currentPage - 1) * itemsPerPage
+    return filteredAndSortedTransactions.slice(startIndex, startIndex + itemsPerPage)
+  }, [filteredAndSortedTransactions, currentPage, itemsPerPage])
 
   const getPageNumbers = () => {
     const pages = []
@@ -190,11 +193,9 @@ function TransactionsPage({ transactions, flash }: TransactionsPageProps): JSX.E
         <div className="container mx-auto p-4 pt-0">
           {/* Mensajes flash */}
           {flash?.success && (
-            <Alert className="mb-4 bg-green-100 border-green-200 text-green-800">
-              {flash.success}
-            </Alert>
+            <Alert className="mb-4 bg-green-100 border-green-200 text-green-800">{flash.success}</Alert>
           )}
-          
+
           {/* Encabezado */}
           <div className="sticky mb-8 -top-2.5">
             <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10">
@@ -265,10 +266,7 @@ function TransactionsPage({ transactions, flash }: TransactionsPageProps): JSX.E
                   </DropdownMenu>
                 </div>
               </div>
-              <TransactionForm 
-                userId={userIdFromPage} 
-                
-              />
+              <TransactionForm userId={userIdFromPage} />
             </div>
 
             {/* Tabla */}
@@ -311,6 +309,7 @@ function TransactionsPage({ transactions, flash }: TransactionsPageProps): JSX.E
                       Monto
                       <ArrowUpDown className="ml-2 h-4 w-4 inline" />
                     </TableHead>
+                    <TableHead className="text-right text-[#2c3e50]">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <AnimatePresence mode="wait">
@@ -340,7 +339,11 @@ function TransactionsPage({ transactions, flash }: TransactionsPageProps): JSX.E
                             delay: index * 0.03,
                             ease: "easeInOut",
                           }}
-                          className="border-b-[#cfdce8] hover:bg-[#eaeff4] min-h-[50px] overflow-hidden"
+                          onClick={() => {
+                            setSelectedTransaction(transaction)
+                            setEditModalOpen(true)
+                          }}
+                          className="border-b-[#cfdce8] hover:bg-[#eaeff4] min-h-[50px] overflow-hidden cursor-pointer"
                         >
                           <TableCell className="text-[#2c3e50]">
                             {new Date(transaction.fecha).toLocaleDateString()}
@@ -361,6 +364,21 @@ function TransactionsPage({ transactions, flash }: TransactionsPageProps): JSX.E
                             {transaction.descripcion}
                           </TableCell>
                           <TableCell className="text-[#2c3e50]">${transaction.monto.toLocaleString()}</TableCell>
+                          <TableCell className="text-right">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setTransactionToDelete(transaction.id)
+                                setDeleteModalOpen(true)
+                              }}
+                            >
+                              <span className="sr-only">Eliminar</span>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
                         </motion.tr>
                       ))
                     )}
@@ -415,6 +433,16 @@ function TransactionsPage({ transactions, flash }: TransactionsPageProps): JSX.E
             </div>
           </div>
         </div>
+        {/* Edit Transaction Modal */}
+        <EditTransactionForm transaction={selectedTransaction} open={editModalOpen} setOpen={setEditModalOpen} />
+
+        {/* Delete Confirmation Modal */}
+        <DeleteConfirmationModal
+          transactionId={transactionToDelete}
+          open={deleteModalOpen}
+          setOpen={setDeleteModalOpen}
+          onDelete={handleDeleteTransaction}
+        />
       </ProtectedLayout>
     </AppLayout>
   )

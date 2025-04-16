@@ -25,6 +25,10 @@ Route::middleware('auth')->group(function () {
     ->name('transactions.store')
     ->defaults('inertia', true);
 
+    Route::delete('transactions/{id}', [transactionsController::class, 'destroy'])
+    ->name('transactions.destroy')
+    ->defaults('inertia', true);
+
     Route::get('/budgets', [BudgetsController::class, 'index'])->name('budgets.index');
 
     Route::get('transactions', [transactionsController::class, 'index'])->name('transactions.index');
